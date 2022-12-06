@@ -30,6 +30,10 @@
 					<comment>Please enter your gateway URL.</comment>
 					<validate>required-entry validate-url no-whitespace</validate>
 				</field>
+				<field id="redirect_to_checkout_on_failed_payment" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Redirect customer to checkout on payment failed.</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
 				<field id="form_responsive" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
 					<label>Form Responsive</label>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

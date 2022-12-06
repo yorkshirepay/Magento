@@ -264,8 +264,7 @@ HTML;
      * @param callable $onSuccess
      * @return mixed
      */
-    public function verifyResponse(array &$response, callable $onThreeDSRequired, callable $onSuccess)
-    {
+    public function verifyResponse(array &$response, callable $onThreeDSRequired, callable $onSuccess, callable $onFailed) {
         if (!$response || !isset($response['responseCode'])) {
             throw new \RuntimeException('Invalid response from Payment Gateway');
         }
@@ -298,13 +297,16 @@ HTML;
 
             // Send request to the ACS server
             $threeDSVersion = (int) str_replace('.', '', $response['threeDSVersion']);
-
             return $onThreeDSRequired($threeDSVersion, $response);
-        } else if ($response['responseCode'] === Gateway::RC_SUCCESS) {
+
+        } else if ($response['responseCode'] == Gateway::RC_SUCCESS) {
+
             return $onSuccess($response);
-        } else {
-            // Signature mismatch
-            throw new \RuntimeException("Failed to take payment: " . htmlentities($response['responseMessage']));
+            
+        } else if ($response['responseCode'] != Gateway::RC_SUCCESS) {
+
+            return $onFailed($response);
+        
         }
     }
 
