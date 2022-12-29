@@ -34,6 +34,10 @@
 					<label>Redirect customer to checkout on payment failed.</label>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
 				</field>
+				<field id="send_customer_sale_invoice" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
+					<label>Send customer invoice email.</label>
+					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+				</field>
 				<field id="form_responsive" translate="label" type="select" sortOrder="9" showInDefault="1" showInWebsite="1" showInStore="0">
 					<label>Form Responsive</label>
 					<source_model>Magento\Config\Model\Config\Source\Yesno</source_model>

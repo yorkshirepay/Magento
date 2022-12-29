@@ -35,6 +35,7 @@ use Magento\Sales\Model\Order\Payment\Transaction\BuilderInterface;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceSender;
 
 class P3Method extends AbstractMethod {
+    
     const VERIFY_ERROR      = 'The signature provided in the response does not match. This response might be fraudulent';
     const PROCESS_ERROR     = 'Sorry, we are unable to process this order (reason: %s). Please correct any faults and try again.';
     const SERVICE_ERROR     = 'SERVICE ERROR - CONTACT ADMIN';
@@ -65,7 +66,6 @@ class P3Method extends AbstractMethod {
      * @var UrlInterface
      */
     public static $_urlBuilder;
-
     /**
      * @var OrderFactory
      */
@@ -89,16 +89,17 @@ class P3Method extends AbstractMethod {
         Data $paymentData,
         ScopeConfigInterface $scopeConfig,
         Logger $logger,
-        AbstractResource $resource = null,
-        AbstractDb $resourceCollection = null,
         OrderFactory $orderFactory,
         Session $checkoutSession,
         CustomerSession $customerSession,
         BuilderInterface $transactionBuilder,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        InvoiceSender $invoiceSender,
         array $data = []
     ) {
         self::$_urlBuilder = $urlBuilder;
-
+        $this->invoiceSender = $invoiceSender;
 
         parent::__construct(
             $context,
@@ -118,6 +119,7 @@ class P3Method extends AbstractMethod {
         $this->countryCode = $this->getConfigData('country_code');
         $this->currencyCode = $this->getConfigData('currency_code');
         $this->redirectToCheckoutOnPayFail = ($this->getConfigData('redirect_to_checkout_on_failed_payment') ? true : false);
+        $this->sendCustomerInvoice = ($this->getConfigData('send_customer_sale_invoice') ? true : false);
 
         // Tell our template to load the integration type we need
         setcookie($this->_code . "_IntegrationMethod", $this->integrationType, [
@@ -328,6 +330,13 @@ class P3Method extends AbstractMethod {
                 $invoice->register();
                 $invoice->setTransactionId($data['xref']);
                 $invoice->save();
+
+                if ($this->sendCustomerInvoice) {
+                    $this->invoiceSender->send($invoice);
+                    $order->addCommentToStatusHistory(
+                        __('Notified customer about invoice creation #%1.', $invoice->getId())
+                       )->setIsCustomerNotified(true)->save();
+                }
             }
 
             $order->setBaseTotalPaid($amount)->setTotalPaid($amount);
