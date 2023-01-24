@@ -1,4 +1,4 @@
-# Disclaimer: CURRENTLY IN DEVELOPMENT - THIS PLUGIN IS CURRENTLY NOT INTENDED FOR USE.
+# DISCLAIMER: CURRENTLY IN DEVELOPMENT - THIS PLUGIN IS CURRENTLY NOT INTENDED FOR USE.
 
 Disclaimer: Please note that we no longer support older versions of SDKs and Modules. We recommend that the latest versions are used.
 
