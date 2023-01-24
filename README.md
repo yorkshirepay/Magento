@@ -1,6 +1,6 @@
 # Disclaimer: CURRENTLY IN DEVELOPMENT - THIS PLUGIN IS CURRENTLY NOT INTENDED FOR USE.
 
-# Disclaimer: Please note that we no longer support older versions of SDKs and Modules. We recommend that the latest versions are used.
+Disclaimer: Please note that we no longer support older versions of SDKs and Modules. We recommend that the latest versions are used.
 
 # P3 Payment Gateway for Magento 2
 
